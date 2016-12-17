@@ -16,6 +16,9 @@
 
 import katex from 'katex';
 import React from 'react';
+import Draft from 'draft-js';
+
+var {Entity} = Draft;
 
 class KatexOutput extends React.Component {
   constructor(props) {
@@ -27,7 +30,6 @@ class KatexOutput extends React.Component {
     if (this._timer) {
       clearTimeout(this._timer);
     }
-
     this._timer = setTimeout(() => {
       katex.render(
         this.props.content,
@@ -124,7 +126,10 @@ export default class TeXBlock extends React.Component {
         texContent = this.state.texValue;
       }
     } else {
-      texContent = this._getValue();
+      texContent = Entity.get(
+        this.props.block.getEntityAt(0)
+      ).getData()['content'];
+        //texContent = this._getValue() || '';
     }
 
     var className = 'TeXEditor-tex';
@@ -160,7 +165,7 @@ export default class TeXBlock extends React.Component {
           </div>
         </div>;
     }
-
+    debugger
     return (
       <div className={className}>
         <KatexOutput content={texContent} onClick={this._onClick} />
