@@ -23,7 +23,7 @@ import {content} from '../data/content';
 import {insertTeXBlock} from '../modifiers/insertTeXBlock';
 import {removeTeXBlock} from '../modifiers/removeTeXBlock';
 
-var {Editor, EditorState, RichUtils} = Draft;
+var {Editor, EditorState, RichUtils, convertToRaw} = Draft;
 
 export default class TeXEditorExample extends React.Component {
   constructor(props) {
@@ -81,8 +81,11 @@ export default class TeXEditorExample extends React.Component {
         editorState: insertTeXBlock(this.state.editorState),
       });
     };
+    this.logState = () => {
+      const content = this.state.editorState.getCurrentContent();
+      console.log(convertToRaw(content));
+    };
   }
-
   /**
    * While editing TeX, set the Draft editor to read-only. This allows us to
    * have a textarea within the DOM.
@@ -107,6 +110,12 @@ export default class TeXEditorExample extends React.Component {
         <button onClick={this._insertTeX} className="TeXEditor-insert">
           {'Insert new TeX'}
         </button>
+        <input
+          onClick={this.logState}
+          className="TeXEditor-insert"
+          type="button"
+          value="Log State"
+        />
       </div>
     );
   }
